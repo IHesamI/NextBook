@@ -1,27 +1,35 @@
 import Link from "next/link"
-
+import useAuth from "@/components/Auth"
+import PrivateComponent from "@/components/PrivateComponents"
+import { useEffect } from "react"
+import { useRouter } from "next/router"
 export default function Home() {
+  const router = useRouter();
+  const { logged } = useAuth()
+  useEffect(() => {
+    if (!logged) {
+     
+      router.push('/login')
+
+      // * router.push has the feature like Link 
+      // router.push({
+      // pathname: '/blog/[date]/[slug]',
+      // query: {
+      // date: '2021-01-01',
+      // slug: 'happy-new-year',
+      // foo: 'bar'
+      // }
+      // });
+
+    }
+
+  }, [logged])
   return (
     <>
-      <div>
-        <Link href={'/posts'} >Posts</Link>
-        <br />
-        <br />
-        <Link href={'/'}>Home</Link>
-        <br />
-        <br />
-        <Link href={{
-          pathname: '/posts/[slug]', // * This is a way for implementing complex urls
-          query: {
-            zarp:'true',
-            slug: '123',
-          }
-        }}>Post 123</Link>
-        <br />
-        <br />
-        <Link href={'/contact-us'}>Contact</Link>
-
-      </div>
+      {
+        logged ? <PrivateComponent /> : <div>zarp</div>
+      }
     </>
   )
+
 }
